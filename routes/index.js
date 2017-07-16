@@ -1,9 +1,20 @@
-var express = require('express');
-var router = express.Router();
+const express = require('express')
+const router = express.Router()
+const Campaign = require('../models/campaign')
 
-/* GET home page. */
-router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
-});
+router.get('/', (req, res, next) => {
+  Campaign
+    .find({})
+    .populate('_creator')
+    .exec((err, campaigns) => {
+      if (err) {
+        throw err
+      } else {
+        res.render('index', {
+          campaigns
+        })
+      }
+    })
+})
 
-module.exports = router;
+module.exports = router
